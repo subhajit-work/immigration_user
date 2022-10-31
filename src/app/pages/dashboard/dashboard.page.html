@@ -1,0 +1,1109 @@
+<ion-content [scrollEvents]="true" (ionScroll)="onScrollHedearFix($event)">
+	<!-- common header show -->
+	<common-header [ngClass]="{'fix-header':isFixedHeader}"></common-header>
+  	
+	<!-- Dashboard page start -->
+	<div class="dashboard-wrapper dashboard">
+		<div class="container" *ngIf="!viewLoadData">
+			<div class="row">
+				<div class="profile">
+					<ion-card>
+						<div class="row">
+							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								<!-- <div class="profile_photo">
+									<ion-item>
+									  <ion-avatar slot="start">
+									    <img src="https://cdn.betteru.in/wp-content/uploads/2018/11/23195912/1-Month-Playablo_CC.jpg">
+									  </ion-avatar>
+									  <ion-label>
+									    <h2>Sudin Mondal</h2>
+									  </ion-label>
+									</ion-item>
+								</div> -->
+								<div class="ion-padding">
+									<div class="row profile-information" >
+										<!-- Product image -->
+										<!-- [routerLink]="['/', 'profile', viewData?.user_info?.id]" -->
+										<div class="col-xs-4 col-sm-4 col-md-3 col-lg-3 text-align"  style="outline: none;">
+											<img *ngIf="profileImagefile" class="m-auto" [src]="profileImagepath+profileImagefile" /> 
+                        					
+											<img *ngIf="!profileImagefile" class="m-auto"  src="assets/images/no-bg-img.jpg"/>
+											<input type="file" id="fileUpload" (change)="profileImage($event)" style="visibility: hidden;width: 0;height: 0;">
+											<label for="fileUpload" *ngIf="!uploadLoader" class="btn btn-info btn-sm mt-1">Change Profile</label>
+											<ion-spinner *ngIf="uploadLoader"></ion-spinner>
+										</div>
+										<!-- Product details -->
+										<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+											<h4 [routerLink]="['/', 'profile', viewData?.user_info?.id]" style="outline: none;cursor: pointer;">{{viewData?.user_info?.first_name}} {{viewData?.user_info?.last_name}}</h4>
+											<p>{{viewData?.user_info?.email}}</p>
+											<p>{{viewData?.user_info?.phone_no}}</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								<div style="text-align: -webkit-center" class="profile_details">
+									<!-- <img style="width: 50px" src="https://www.nuaire.com/media/wysiwyg/chart.png"> -->
+									<!-- You can now use it in app.component.html -->
+									<circle-progress
+									[percent]="completePercent"
+									[radius]="100"
+									[outerStrokeWidth]="16"
+									[innerStrokeWidth]="8"
+									[outerStrokeColor]="'#78C000'"
+									[innerStrokeColor]="'#C7E596'"
+									[animation]="true"
+									[animationDuration]="300"
+									></circle-progress>
+									
+								</div>
+								<div class="profile_details">
+									<ion-label class="ion-float-right black"  >
+										<b>You have completed 50% profile. Please complete Address and Education details.</b>
+										<!-- <i [routerLink]="['/', 'student-register', 'edit', viewData?.user_info?.id]">Edit</i> -->
+									</ion-label>
+								</div>
+							</div>
+						</div>
+					</ion-card>
+				</div>
+			</div>
+			<!-- Menu list -->
+			<div class="table-row ">
+				<mat-tab-group class="dashboard-tab">
+					<mat-tab>
+					  <ng-template mat-tab-label >
+						<div (click)="getProfilefilds('profile')" class="d-flex align-items-center">
+							<mat-icon class="example-tab-icon">person</mat-icon>
+							My Profile
+						</div>
+						
+					  </ng-template>
+					  <div class="tab-inner profile-tab">
+						<div class="student-register-wrapper pt-0">
+							<div class="ion-no-padding student-register-inner form-col">
+								<div class="row">
+									<h6>
+										Personal Details
+										<ion-button (click)="profileEdit = !profileEdit">
+											<ion-icon *ngIf="!profileEdit" slot="icon-only" name="create"></ion-icon>
+											<ion-icon *ngIf="profileEdit" slot="icon-only" name="close-circle"></ion-icon>
+										</ion-button>
+									</h6>
+								</div>
+								
+								<div *ngIf="!profileEdit" class="row">
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>First Name</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.first_name}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Last Name</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.last_name}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Gender</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.gender}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>D.O.B</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.date_of_birth}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Marital Status</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.marital_status}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Mobile</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.phone_no}}</ion-note>
+										</ion-item>
+									</div>
+									<!-- <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Linkedin profile</ion-label>
+											<ion-note slot="end">Subhajit</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Github profile</ion-label>
+											<ion-note slot="end">Manna</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Skype Id</ion-label>
+											<ion-note slot="end">Male</ion-note>
+										</ion-item>
+									</div> -->
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Country</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.get_country?.name}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>State</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.get_state?.name}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>City</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.get_city?.name}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Pin</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.pin}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Permanent address</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.p_address}}</ion-note>
+										</ion-item>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<ion-item>
+											<ion-label>Correspondence address</ion-label>
+											<ion-note slot="end">{{viewData?.user_info?.current_address}}</ion-note>
+										</ion-item>
+									</div>
+								</div>
+								<div class="row" *ngIf="profileEdit">
+									<!-- *ngIf="!profileformloader" -->
+									<form #profileform="ngForm" (ngSubmit)="onSubmit(profileform)" >
+										<div class="row ion-padding">
+
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+													<ion-input name="first_name" [(ngModel)]="model.first_name" clearInput required placeholder="Please enter first name"></ion-input>
+												</div>
+											</div>
+											<!-- Last Name -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">Last Name <sup>*</sup> </ion-label>
+													<ion-input name="last_name" [(ngModel)]="model.last_name" clearInput required placeholder="Please enter last name"></ion-input>
+												</div>
+											</div>
+											<!-- email -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">Email <sup>*</sup> </ion-label>
+													<ion-input name="email" type="text" [(ngModel)]="model.email" clearInput required placeholder="Please enter email" readonly></ion-input>
+												</div>
+											</div>
+											<!-- Gender -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">Gender <sup>*</sup></ion-label>
+													<ion-list>
+														<div class="radio-item" *ngFor="let item of genderArry; let i = index;">
+															<!-- gender >>  {{item.gender}} -->
+															<input type="radio" id="ritema{{i}}" [value]="item?.value" name="gender" [(ngModel)]="model.gender">
+															<label for="ritema{{i}}">{{item?.name}}</label>
+
+														</div>
+														<input type="hidden" name="gender" [(ngModel)]="model.gender" required>
+													</ion-list>
+												</div>
+											</div>
+											<!-- Date of birth -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">D.O.B <sup>*</sup></ion-label>
+													<li-ionic4-datepicker 
+														name="date_of_birth" 
+														[(ngModel)]="model.date_of_birth"
+														placeholder="Please enter D.O.B"
+														[inputDateConfig]="datePickerObj" required
+													></li-ionic4-datepicker>
+													<!-- (ngModelChange)="onDateChangeDate('dob', model.dob)" -->
+												</div>
+											</div>
+											<!-- Marital Status -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">Marital Status <sup>*</sup></ion-label>
+													<ng-select #maritalStatusSearch
+														[loading]="selectLoading"
+														[dropdownPosition]="'bottom'"
+														placeholder="Please Select"
+														[items]="maritalStatus"
+														bindLabel="name"
+														bindValue="id"
+														[searchable]="false"
+														name="marital_status" 
+														[(ngModel)]="model.marital_status"
+														required
+														>
+														<ng-template ng-header-tmp>
+															<input placeholder="Search" class="dropdown-custom-search" type="text" (input)="maritalStatusSearch.filter($event.target.value)" [autofocus]="true" />
+														</ng-template>
+													</ng-select>
+												</div>
+											</div>
+											 <!-- Mobile -->
+											 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">Mobile<sup>*</sup> </ion-label>
+	
+													<div class="d-flex mobile coun">
+														<div>
+															<ng-select appearance="outline" 
+																name="coun_code"
+																required 
+																[(ngModel)]="model.coun_code" 
+																[searchable]="true" 
+																placeholder="Country code"
+																[clearable]="false" readonly required>
+																<ng-option *ngFor="let item of countryList" [value]="item.phonecode">
+																	
+																	{{item.name}} ({{item.phonecode}})
+																</ng-option>
+															</ng-select>
+														</div>
+														<ion-input OnlyNumber="true" readonly type="tel" minlength="5" maxlength="20" name="phone_no" [(ngModel)]="model.phone_no" clearInput required placeholder="Please enter mobile number"></ion-input>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" name="service_type" [(ngModel)]="model.service_type">
+											<input type="hidden" name="security_question" [(ngModel)]="model.security_question">
+											<input type="hidden" name="security_ans" [(ngModel)]="model.security_ans">
+											<!-- Country -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">Country <sup>*</sup></ion-label>
+													<ng-select #countryAddressSerch
+														[loading]="selectLoading"
+														[dropdownPosition]="'bottom'"
+														placeholder="Please Select Country"
+														[items]="countryList"
+														bindLabel="name"
+														bindValue="id"
+														(change)="onChangeLocation(model.country, 'state', model)"
+														[searchable]="false"
+														name="country" 
+														[(ngModel)]="model.country"
+														required
+														>
+														<ng-template ng-header-tmp>
+															<input placeholder="Search" class="dropdown-custom-search" type="text" (input)="countryAddressSerch.filter($event.target.value)" [autofocus]="true" />
+														</ng-template>
+													</ng-select>
+												</div>
+											</div>
+				
+											<!-- State -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'disabled': stateLoading}">
+												<div class="form-item">
+													<ion-label position="floating">State <sup>*</sup></ion-label>
+													<ng-select #stateAddressSerch
+														[loading]="selectLoadingDepend"
+														[dropdownPosition]="'bottom'"
+														placeholder="Please Select State"
+														[items]="stateList"
+														bindLabel="name"
+														bindValue="id"
+														(change)="onChangeLocation(model.state, 'city', model)"
+														[searchable]="false"
+														name="state" 
+														[(ngModel)]="model.state" 
+														required
+														>
+														<ng-template ng-header-tmp>
+															<input placeholder="Search" class="dropdown-custom-search" type="text" (input)="stateAddressSerch.filter($event.target.value)" [autofocus]="true" />
+														</ng-template>
+													</ng-select>
+												</div>
+											</div>
+				
+											<!-- City -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'disabled': stateLoading || cityLoading}">
+												<div class="form-item">
+													<ion-label position="floating">City <sup>*</sup></ion-label>
+													<ng-select #cityAddressSerch
+														[loading]="selectLoading"
+														[dropdownPosition]="'bottom'"
+														placeholder="Please Select City"
+														[items]="cityList"
+														bindLabel="name"
+														bindValue="id"
+														[searchable]="false"
+														name="city" 
+														[(ngModel)]="model.city" 
+														required
+														>
+														<ng-template ng-header-tmp>
+															<input placeholder="Search" class="dropdown-custom-search" type="text" (input)="cityAddressSerch.filter($event.target.value)" [autofocus]="true" />
+														</ng-template>
+													</ng-select>
+												</div>
+											</div>
+											<!-- Pin -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">Pin <sup>*</sup></ion-label>
+													<ion-input OnlyNumber="true" type="tel" minlength="6"maxlength="6" name="pin" [(ngModel)]="model.pin" clearInput placeholder="Please enter pin" required></ion-input>
+												</div>
+											</div>
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item pt-4 mt-2">
+													<div class="d-flex">
+														<ion-checkbox slot="end" name="addresssame" id="addresssame" [(ngModel)]="model.addresssame" (ionChange)="addressSameorNot(model.addresssame)"></ion-checkbox>
+														<label for="addresssame">&nbsp;&nbsp;Permanent and Correspondence address is same.</label>
+													</div>
+													
+												</div>
+											</div>
+											<!-- Permanent address -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+												<div class="form-item">
+													<ion-label position="floating">Permanent address <sup>*</sup></ion-label>
+													<ion-textarea auto-grow="true" name="p_address" [(ngModel)]="model.p_address" clearInput placeholder="Please enter permanent address" required></ion-textarea>
+												</div>
+											</div>
+				
+											<!-- Correspondence address -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" *ngIf="!model.addresssame">
+												<div class="form-item">
+													<ion-label position="floating">Correspondence address <sup>*</sup></ion-label>
+													<ion-textarea auto-grow="true" name="current_address" [(ngModel)]="model.current_address" clearInput placeholder="Please enter correspondence address" required></ion-textarea>
+												</div>
+											</div>
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" *ngIf="model.addresssame">
+												<div class="form-item">
+													<ion-label position="floating">Correspondence address <sup>*</sup></ion-label>
+													<ion-textarea auto-grow="true" name="current_address" [(ngModel)]="model.p_address" clearInput placeholder="Please enter correspondence address" readonly required></ion-textarea>
+												</div>
+											</div>
+										</div>
+
+										<!-- submit button -->
+										<div class="row ion-padding-bottom submit-button-wrapper">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+												<div class="custom-btn">
+													<ion-button size="default" [disabled]="!profileform.valid"
+													type="submit"  
+													tooltip="Submit" flow="up">
+													<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+														<span class="submitText">Update</span>
+													</ion-button>
+													<ion-button color="danger" size="default" tooltip="Cancel" flow="up" (click)="profileEdit = !profileEdit">
+														<span class="submitText">Cancel</span>
+													</ion-button>
+												</div>
+											</div>
+										</div>
+									</form>
+									<!-- <div class="col-lg-12 text-center"><ion-spinner name="lines" *ngIf="profileformloader"></ion-spinner ></div> -->
+									
+								</div>
+							</div>
+						</div>
+					  </div>
+					</mat-tab>
+				  
+					<mat-tab>
+						<ng-template mat-tab-label>
+							<mat-icon class="example-tab-icon">settings_applications</mat-icon>
+							Services
+						</ng-template>
+						<div class="tab-inner profile-tab">
+							<div class="student-register-wrapper">
+								<div class="ion-no-padding student-register-inner form-col">
+									<div class="faq-content-wrapper">
+										<mat-accordion>
+											<mat-expansion-panel>
+												<mat-expansion-panel-header>
+													<mat-panel-title>
+													Study permit/Work permit
+													</mat-panel-title>
+												</mat-expansion-panel-header>
+												<form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+													<div class="row ion-padding">
+														<!-- First Name -->
+														<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+															<div class="form-item">
+																<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+																<ion-input name="first_name" [(ngModel)]="model.first_name" clearInput required placeholder="Please enter first name"></ion-input>
+															</div>
+														</div>
+													</div>
+													<!-- submit button -->
+													<div class="row ion-padding-bottom submit-button-wrapper">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+															<div class="custom-btn">
+																<ion-button size="default"
+																type="submit"  [disabled]="!studentsAddForm.valid"
+																tooltip="Submit" flow="up">
+																<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+																<span class="submitText">Update</span>
+																</ion-button>
+																<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																	Cancel
+																</ion-button>
+															</div>
+														</div>
+													</div>
+												</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+											  <mat-expansion-panel-header>
+												<mat-panel-title>
+												  Family Reunification
+												</mat-panel-title>
+											  </mat-expansion-panel-header>
+											  <form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+												<div class="row ion-padding">
+													<!-- First Name -->
+													<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+														<div class="form-item">
+															<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+															<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+														</div>
+													</div>
+												</div>
+												<!-- submit button -->
+												<div class="row ion-padding-bottom submit-button-wrapper">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+														<div class="custom-btn">
+															<ion-button size="default"
+															type="submit"  [disabled]="!studentsAddForm.valid"
+															tooltip="Submit" flow="up">
+															<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+															<span class="submitText">Update</span>
+															</ion-button>
+															<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																Cancel
+															</ion-button>
+														</div>
+													</div>
+												</div>
+											</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+												<mat-expansion-panel-header>
+													<mat-panel-title>
+														Business Immigration/Start up visa
+													</mat-panel-title>
+												</mat-expansion-panel-header>
+												<form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+													<div class="row ion-padding">
+														<!-- First Name -->
+														<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+															<div class="form-item">
+																<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+																<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+															</div>
+														</div>
+													</div>
+													<!-- submit button -->
+													<div class="row ion-padding-bottom submit-button-wrapper">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+															<div class="custom-btn">
+																<ion-button size="default"
+																type="submit"  [disabled]="!studentsAddForm.valid"
+																tooltip="Submit" flow="up">
+																<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+																<span class="submitText">Update</span>
+																</ion-button>
+																<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																	Cancel
+																</ion-button>
+															</div>
+														</div>
+													</div>
+												</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+											  <mat-expansion-panel-header>
+												<mat-panel-title>
+												  Entrepreneur / Investor
+												</mat-panel-title>
+											  </mat-expansion-panel-header>
+											  <form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+												<div class="row ion-padding">
+													<!-- First Name -->
+													<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+														<div class="form-item">
+															<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+															<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+														</div>
+													</div>
+												</div>
+												<!-- submit button -->
+												<div class="row ion-padding-bottom submit-button-wrapper">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+														<div class="custom-btn">
+															<ion-button size="default"
+															type="submit"  [disabled]="!studentsAddForm.valid"
+															tooltip="Submit" flow="up">
+															<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+															<span class="submitText">Update</span>
+															</ion-button>
+															<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																Cancel
+															</ion-button>
+														</div>
+													</div>
+												</div>
+											</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+												<mat-expansion-panel-header>
+													<mat-panel-title>
+													Express entry (All Streams)
+													</mat-panel-title>
+												</mat-expansion-panel-header>
+												<form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+													<div class="row ion-padding">
+														<!-- First Name -->
+														<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+															<div class="form-item">
+																<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+																<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+															</div>
+														</div>
+													</div>
+													<!-- submit button -->
+													<div class="row ion-padding-bottom submit-button-wrapper">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+															<div class="custom-btn">
+																<ion-button size="default"
+																type="submit"  [disabled]="!studentsAddForm.valid"
+																tooltip="Submit" flow="up">
+																<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+																<span class="submitText">Update</span>
+																</ion-button>
+																<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																	Cancel
+																</ion-button>
+															</div>
+														</div>
+													</div>
+												</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+											  <mat-expansion-panel-header>
+												<mat-panel-title>
+												  Visitor visa
+												</mat-panel-title>
+											  </mat-expansion-panel-header>
+											  <form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+												<div class="row ion-padding">
+													<!-- First Name -->
+													<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+														<div class="form-item">
+															<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+															<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+														</div>
+													</div>
+												</div>
+												<!-- submit button -->
+												<div class="row ion-padding-bottom submit-button-wrapper">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+														<div class="custom-btn">
+															<ion-button size="default"
+															type="submit"  [disabled]="!studentsAddForm.valid"
+															tooltip="Submit" flow="up">
+															<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+															<span class="submitText">Update</span>
+															</ion-button>
+															<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																Cancel
+															</ion-button>
+														</div>
+													</div>
+												</div>
+											</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+												<mat-expansion-panel-header>
+													<mat-panel-title>
+													Canadian citizenship
+													</mat-panel-title>
+												</mat-expansion-panel-header>
+												<form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+													<div class="row ion-padding">
+														<!-- First Name -->
+														<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+															<div class="form-item">
+																<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+																<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+															</div>
+														</div>
+													</div>
+													<!-- submit button -->
+													<div class="row ion-padding-bottom submit-button-wrapper">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+															<div class="custom-btn">
+																<ion-button size="default"
+																type="submit"  [disabled]="!studentsAddForm.valid"
+																tooltip="Submit" flow="up">
+																<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+																<span class="submitText">Update</span>
+																</ion-button>
+																<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																	Cancel
+																</ion-button>
+															</div>
+														</div>
+													</div>
+												</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+											  <mat-expansion-panel-header>
+												<mat-panel-title>
+												  Provincial Nomination
+												</mat-panel-title>
+											  </mat-expansion-panel-header>
+											  <form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+												<div class="row ion-padding">
+													<!-- First Name -->
+													<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+														<div class="form-item">
+															<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+															<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+														</div>
+													</div>
+												</div>
+												<!-- submit button -->
+												<div class="row ion-padding-bottom submit-button-wrapper">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+														<div class="custom-btn">
+															<ion-button size="default"
+															type="submit"  [disabled]="!studentsAddForm.valid"
+															tooltip="Submit" flow="up">
+															<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+															<span class="submitText">Update</span>
+															</ion-button>
+															<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																Cancel
+															</ion-button>
+														</div>
+													</div>
+												</div>
+											</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+												<mat-expansion-panel-header>
+													<mat-panel-title>
+													PR card renewal
+													</mat-panel-title>
+												</mat-expansion-panel-header>
+												<form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+													<div class="row ion-padding">
+														<!-- First Name -->
+														<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+															<div class="form-item">
+																<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+																<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+															</div>
+														</div>
+													</div>
+													<!-- submit button -->
+													<div class="row ion-padding-bottom submit-button-wrapper">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+															<div class="custom-btn">
+																<ion-button size="default"
+																type="submit"  [disabled]="!studentsAddForm.valid"
+																tooltip="Submit" flow="up">
+																<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+																<span class="submitText">Update</span>
+																</ion-button>
+																<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																	Cancel
+																</ion-button>
+															</div>
+														</div>
+													</div>
+												</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+											  <mat-expansion-panel-header>
+												<mat-panel-title>
+												  LMIA
+												</mat-panel-title>
+											  </mat-expansion-panel-header>
+											  <form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+												<div class="row ion-padding">
+													<!-- First Name -->
+													<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+														<div class="form-item">
+															<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+															<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+														</div>
+													</div>
+												</div>
+												<!-- submit button -->
+												<div class="row ion-padding-bottom submit-button-wrapper">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+														<div class="custom-btn">
+															<ion-button size="default"
+															type="submit"  [disabled]="!studentsAddForm.valid"
+															tooltip="Submit" flow="up">
+															<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+															<span class="submitText">Update</span>
+															</ion-button>
+															<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																Cancel
+															</ion-button>
+														</div>
+													</div>
+												</div>
+											</form>
+											</mat-expansion-panel>
+											<mat-expansion-panel>
+												<mat-expansion-panel-header>
+													<mat-panel-title>
+													Post landing services
+													</mat-panel-title>
+												</mat-expansion-panel-header>
+												<form  #studentsAddForm="ngForm" (ngSubmit)="onSubmit(studentsAddForm)" >
+													<div class="row ion-padding">
+														<!-- First Name -->
+														<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+															<div class="form-item">
+																<ion-label position="floating">First Name <sup>*</sup> </ion-label>
+																<ion-input name="fname" [(ngModel)]="model.fname" clearInput required></ion-input>
+															</div>
+														</div>
+													</div>
+													<!-- submit button -->
+													<div class="row ion-padding-bottom submit-button-wrapper">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+															<div class="custom-btn">
+																<ion-button size="default"
+																type="submit"  [disabled]="!studentsAddForm.valid"
+																tooltip="Submit" flow="up">
+																<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+																<span class="submitText">Update</span>
+																</ion-button>
+																<ion-button class="reload clear-form" size="default" fill="clear" tooltip="Cancel" flow="up">
+																	Cancel
+																</ion-button>
+															</div>
+														</div>
+													</div>
+												</form>
+											</mat-expansion-panel>
+										</mat-accordion>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</mat-tab>
+
+					<mat-tab>
+						<div (click)="getProfilefilds('document')">
+							<ng-template mat-tab-label >
+								<div (click)="getProfilefilds('document')" class="d-flex align-items-center">
+									<mat-icon class="example-tab-icon">description</mat-icon>
+									Document
+								</div>
+							</ng-template>
+						</div>
+						
+						<div class="tab-inner profile-tab">
+							<div class="student-register-wrapper pt-0">
+								<div class="ion-no-padding student-register-inner form-col" *ngIf="edit">
+									<form  #DocumentForm="ngForm" (ngSubmit)="onSubmitDocumentForm(DocumentForm)"  *ngIf="!docformloader">
+										<div class="row ion-padding" >
+	
+											<!--text type -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"  [ngClass]="{'d-block': row?.input_type == 'text', 'd-none': row?.input_type != 'text'}" *ngFor="let row of documentformFilds;let i = index;">
+												<div class="form-item" *ngIf="row?.input_type == 'text'">
+													<ion-label position="floating">{{row?.label}} <sup>*</sup> </ion-label>
+													<ion-input name="{{row?.slug}}" [(ngModel)]="row.label[i]" clearInput required></ion-input>
+												</div>
+												
+											</div>
+											<!-- tye email -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'d-block': row?.input_type == 'email', 'd-none': row?.input_type != 'email'}" *ngFor="let row of documentformFilds;let i = index;">
+												<div class="form-item" *ngIf="row?.input_type == 'email'">
+													<ion-label position="floating">{{row?.label}} <sup>*</sup> </ion-label>
+													<ion-input name="{{row?.slug}}" [(ngModel)]="row.label[i]" clearInput required required></ion-input>
+												</div>
+											</div>
+											<!-- type "check_box" -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'d-block': row?.input_type == 'check_box', 'd-none': row?.input_type != 'check_box'}" *ngFor="let row of documentformFilds;let i = index;">
+												<div class="form-item" *ngIf="row?.input_type == 'check_box'">
+													<ion-label position="floating">{{row?.label}}<sup>*</sup></ion-label>
+													<div class="d-flex mt-1"  >
+														<div class="d-flex" *ngFor="let item of row?.options; let k = index">
+															<input name="{{row.slug}}" type="checkbox" [(ngModel)]="item.checked"  [value]="item" checked="false" (change)="checkList($event,row?.slug)">
+															&nbsp;{{item}} &nbsp;
+														</div>
+														<input type="hidden" name="{{row.slug}}" [(ngModel)]="row.slug" required>
+													</div>
+												</div>
+											</div>
+											<!-- tye radio -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'d-block': row?.input_type == 'radio', 'd-none': row?.input_type != 'radio'}" *ngFor="let row of documentformFilds;let i = index;">
+												<div class="form-item" *ngIf="row?.input_type == 'radio'">
+													<ion-label position="floating">{{row?.label}} <sup>*</sup></ion-label>
+													<ion-list >
+														<div class="radio-item" *ngFor="let item of row?.options; let i = index;">
+															<input type="radio" [id]="item" [value]="item" name="{{row?.slug}}" [(ngModel)]="item.slug">
+															<label [for]="item">{{item}}</label>
+														</div>
+													</ion-list>
+												</div>
+												<input type="hidden" name="{{row.slug}}" [(ngModel)]="row.checked" required>
+											</div>
+											<!-- type date -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'d-block': row?.input_type == 'date', 'd-none': row?.input_type != 'date'}"  *ngFor="let row of documentformFilds;let i = index;">
+												
+												<div class="form-item" *ngIf="row?.input_type == 'date'">
+													<ion-label position="floating">{{row?.label}} <sup>*</sup></ion-label>
+													<li-ionic4-datepicker 
+														name="{{row?.slug}}" 
+														[(ngModel)]="row.dob"
+														[inputDateConfig]="datePickerObj" required
+													></li-ionic4-datepicker>
+													<!-- (ngModelChange)="onDateChangeDate('dob', model.dob)" -->
+												</div>
+											</div>
+											<!-- type select -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'d-block': row?.input_type == 'option', 'd-none': row?.input_type != 'option'}"  *ngFor="let row of documentformFilds;let i = index;">
+												<div class="form-item" *ngIf="row?.input_type == 'option'">
+													<ion-label position="floating">{{row?.label}} <sup>*</sup></ion-label>
+													<ng-select #maritalStatusSearch
+														[loading]="selectLoading"
+														[dropdownPosition]="'bottom'"
+														placeholder="Please Select {{row?.label}}"
+														[items]="row?.options"
+														bindLabel="name"
+														bindValue="id"
+														[searchable]="false"
+														name="{{row?.slug}}" 
+														[(ngModel)]="row.label[i]"
+														required>
+														<ng-template ng-header-tmp>
+															<input placeholder="Search" class="dropdown-custom-search" type="text" (input)="maritalStatusSearch.filter($event.target.value)" [autofocus]="true" />
+														</ng-template>
+													</ng-select>
+												</div>
+											</div>
+											 <!-- type phone -->
+											 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'d-block': row?.slug == 'phone_no', 'd-none': row?.slug != 'phone_no'}" *ngFor="let row of documentformFilds;let i = index;">
+												<div class="form-item" *ngIf="row?.slug == 'phone_no'">
+													<ion-label position="floating">{{row?.label}} <sup>*</sup> </ion-label>
+													<ion-input OnlyNumber="true" type="tel" minlength="5" maxlength="20" name="{{row?.slug}}" [(ngModel)]="row.label[i]" clearInput required></ion-input>
+												</div>
+											</div>
+											 <!-- type number -->
+											 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'d-block': row?.input_type == 'number', 'd-none': row?.input_type != 'number'}" *ngFor="let row of documentformFilds;let i = index;">
+												<div class="form-item" *ngIf="row?.input_type == 'number'">
+													<ion-label position="floating">{{row?.label}} <sup>*</sup> </ion-label>
+													<ion-input OnlyNumber="true" type="number"  name="{{row?.slug}}" [(ngModel)]="row.label[i]" clearInput required></ion-input>
+												</div>
+											</div>
+											<!-- type file -->
+											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" [ngClass]="{'d-block': row?.input_type == 'file', 'd-none': row?.input_type != 'file'}" *ngFor="let row of documentformFilds;let i = index;">
+												<div class="form-item" *ngIf="row?.input_type == 'file'">
+													<ion-label position="floating">{{row?.label}}<sup>*</sup> </ion-label>
+													<div class="d-flex">
+														<input  type="file" name="{{row?.slug}}" [(ngModel)]="row.label[i]"  clearInput  (change)="readURL($event,i,row?.slug)" required>
+														<img [src]="imageSrc[i]" style="width:30px;object-fit: contain;" *ngIf="imageSrc[i]">
+													</div>
+												</div>
+											</div>
+										</div>
+										<div [ngClass]="{'d-block': row?.input_type == 'number', 'd-none': row?.input_type != 'number'}" *ngFor="let row of documentformFilds;let i = index;">
+											<ion-input OnlyNumber="true" type="hidden"  name="{{row?.slug}}" [(ngModel)]="row.fake" clearInput ></ion-input>
+										</div>
+										<!-- submit button -->
+										<div class="row ion-padding-bottom submit-button-wrapper">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ion-text-right">
+												<div class="custom-btn">
+													<!-- [disabled]="!DocumentForm.valid checkListData.lenth" -->
+													<ion-button size="default"
+													type="submit" [disabled]="!DocumentForm.valid"
+													tooltip="Submit" flow="up">
+													<ion-spinner name="crescent" *ngIf="form_submit_text == 'Submitting'"></ion-spinner> 
+														<span class="submitText">Update</span>
+													</ion-button>
+												</div>
+											</div>
+										</div>
+									</form>
+									<div class="col-lg-12 text-center">
+										<ion-spinner name="lines" *ngIf="docformloader"></ion-spinner >
+									</div>
+									
+								</div>
+								<div class="ion-no-padding student-register-inner form-col"*ngIf="!edit">
+									<div class="row">
+										<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"  [ngClass]="{'d-none': data?.key ==  'chech_box_data' || data?.key ==  'document_img'}" *ngFor="let data of documentformFilds | keyvalue;let i = index">
+											<ion-item >
+												<ion-label class="text-capitalize">{{data?.key}}</ion-label>
+												<ion-note slot="end">{{data?.value}}</ion-note>
+											</ion-item>
+										</div>
+									</div>
+										<div class="row"  *ngFor="let data of chech_box_data | keyvalue;let i = index">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngFor="let data of chech_box_data[i] | keyvalue;let j = index">
+												<ion-item >
+													<ion-label class="text-capitalize overflow-visible">{{data?.key}}</ion-label>
+													<ion-note slot="end">{{data?.value}}</ion-note>
+												</ion-item>
+											</div>
+										</div>
+										<div class="row"  *ngFor="let data of document_img | keyvalue;let i = index">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngFor="let data of document_img[i] | keyvalue;">
+												<ion-item >
+													<ion-label class="text-capitalize overflow-visible">{{data?.key}}</ion-label>
+													<ion-note slot="end">
+														<!-- img -->
+														<img [src]="imagepath+data?.value" class="d-none" alt="" style="height: 80px;" [ngClass]="{'d-block': data?.value.split('.').pop() == 'png' || data?.value.split('.').pop() == 'jpg' || data?.value.split('.').pop() == 'jpeg' || data?.value.split('.').pop() == 'jfif'|| data?.value.split('.').pop() == 'wepb' || data?.value.split('.').pop() == 'gif'}">
+														<!-- pdf -->
+														<div  [ngClass]="{'d-none': data?.value.split('.').pop() == 'png' || data?.value.split('.').pop() == 'jpg' || data?.value.split('.').pop() == 'jpeg' || data?.value.split('.').pop() == 'jfif'|| data?.value.split('.').pop() == 'wepb' || data?.value.split('.').pop() == 'gif'}">
+															<a [href]="imagepath+data?.value" target="_blank" class="d-flex">OPEN <mat-icon>open_in_new</mat-icon></a>
+														</div>
+													</ion-note>
+												</ion-item>
+											</div>
+										</div>
+								</div>
+							</div>
+						</div>
+					  </mat-tab>
+				  
+					<mat-tab>
+					  <ng-template mat-tab-label>
+						<mat-icon class="example-tab-icon">elevator</mat-icon>
+						Counseling & Evaluation
+					  </ng-template>
+				  
+					  Content 4
+					</mat-tab>
+				</mat-tab-group>
+			</div>
+
+		</div>
+		
+
+		<!-- skeleton loading  start-->
+		<div class="container" *ngIf="viewLoadData">
+			<div class="row">
+				<div class="profile">
+					<ion-card>
+						<div class="row">
+							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								<div class="ion-padding">
+									<div class="row profile-information">
+										<!-- Product image -->
+										<div class="col-xs-4 col-sm-4 col-md-3 col-lg-3">
+											<ion-skeleton-text animated style="width: 100px; height: 100px; "></ion-skeleton-text>
+										</div>
+										<!-- Product details -->
+										<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+											<h4>
+												<ion-skeleton-text animated style="width: 70%; "></ion-skeleton-text>
+											</h4>
+											<p>
+												<ion-skeleton-text animated style="width: 60%; "></ion-skeleton-text>
+											</p>
+											<p>
+												<ion-skeleton-text animated style="width:50%; "></ion-skeleton-text>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								<div class="profile_details">
+								<ion-skeleton-text animated style="width: 130px; height:130px; border-radius: 50%; top: 0;top: 0; right: auto; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%);"></ion-skeleton-text>
+								</div>
+							</div>
+						</div>
+					</ion-card>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 product_information">
+					<ion-card>
+						<div class="row">
+							<div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
+								<ion-avatar slot="start">
+									<ion-skeleton-text animated style="width: 45px; height: 45px; "></ion-skeleton-text>
+								</ion-avatar>
+								<h2>
+									<ion-skeleton-text animated style="width: 60%; text-align: center; margin-left: 37px;"></ion-skeleton-text>
+								</h2>
+							</div>
+							<div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">
+								<h2 class="count">
+									<ion-skeleton-text animated style="width: 100%; "></ion-skeleton-text>
+								</h2>
+							</div>
+						</div>
+					</ion-card>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 product_information">
+					<ion-card>
+						<div class="row">
+							<div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
+								<ion-avatar slot="start">
+									<ion-skeleton-text animated style="width: 45px; height: 45px; "></ion-skeleton-text>
+								</ion-avatar>
+								<h2>
+									<ion-skeleton-text animated style="width: 60%; text-align: center; margin-left: 37px;"></ion-skeleton-text>
+								</h2>
+							</div>
+							<div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">
+								<h2 class="count">
+									<ion-skeleton-text animated style="width: 100%; "></ion-skeleton-text>
+								</h2>
+							</div>
+						</div>
+					</ion-card>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 product_information">
+					<ion-card>
+						<div class="row">
+							<div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
+								<ion-avatar slot="start">
+									<ion-skeleton-text animated style="width: 45px; height: 45px; "></ion-skeleton-text>
+								</ion-avatar>
+								<h2>
+									<ion-skeleton-text animated style="width: 60%; text-align: center; margin-left: 37px;"></ion-skeleton-text>
+								</h2>
+							</div>
+							<div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">
+								<h2 class="count">
+									<ion-skeleton-text animated style="width: 100%; "></ion-skeleton-text>
+								</h2>
+							</div>
+						</div>
+					</ion-card>
+				</div>
+			</div>
+		</div>
+		<!-- skeleton loading  end-->
+
+	</div>
+	<!-- Dashboard page end -->
+
+	<!-- common footer show -->
+	<common-footer></common-footer>
+</ion-content>
